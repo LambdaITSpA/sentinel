@@ -1,0 +1,10 @@
+<VirtualHost *:80>
+    RailsEnv development
+    ServerName localhost
+    ServerAlias *.lvh.me
+    DocumentRoot /home/ubuntu/webapp-dev/public
+    <Directory /home/ubuntu/webapp-dev/public>
+        AllowOverride all
+        Options -MultiViews
+    </Directory>
+</VirtualHost>
