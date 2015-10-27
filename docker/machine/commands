@@ -1,0 +1,26 @@
+#Install (as root)
+# v0.4
+curl -L https://github.com/docker/machine/releases/download/v0.4.0/docker-machine_linux-amd64 > /usr/local/bin/docker-machine
+#Bleeding edge
+curl -L -k https://docker-machine-builds.evanhazlett.com/latest/docker-machine_linux_amd64 > /usr/local/bin/docker-machine
+chmod +x /usr/local/bin/docker-machine
+
+#Create local VirtualBox machine
+docker-machine create --driver virtualbox dev
+
+#Copy local files to VM
+docker-machine scp -r . dev:/home/docker/sinbad-b2b
+
+#Copy VM files to local
+docker-machine scp -r dev:/home/docker/sinbad-b2b/* .
+
+docker-machine create \
+--driver amazonec2 \
+--amazonec2-access-key AKIAJE2N6CPUAZZFDDVA \
+--amazonec2-secret-key 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 \
+--amazonec2-vpc-id vpc-baeb20df \
+--amazonec2-region us-west-2 \
+--amazonec2-instance-type t2.small \
+sentinel
+
+docker-machine ssh sentinel "sudo groupadd docker; sudo gpasswd -a ubuntu docker; sudo service docker restart"
