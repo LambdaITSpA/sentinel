@@ -85,5 +85,5 @@ test:
 production:
   <<: *default
   database: sentinel_production
-  username: sentinel
-  password: <%= ENV['SENTINEL_DATABASE_PASSWORD'] %>
+  #username: sentinel
+  #password: <%= ENV['SENTINEL_DATABASE_PASSWORD'] %>
