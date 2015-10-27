@@ -1,5 +1,5 @@
 docker rm -f sentinel
-docker run --net="bridge" \
+docker run --net="bridge" -p 80:80 \
 -v $PWD/docker/rails/default:/etc/apache2/sites-available/default:ro \
 -v $PWD/docker/rails/clientsentinel.cl:/etc/apache2/sites-enabled/clientsentinel.cl:ro \
 --add-host clientsentinel.cl:127.0.0.1 \
