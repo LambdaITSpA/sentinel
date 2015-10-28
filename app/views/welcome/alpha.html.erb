@@ -1,0 +1,94 @@
+<!doctype html>
+<html ng-app="eagleEye">
+  <head>
+  	<!-- jQuery -->
+  	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+  	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+
+    <script type="text/javascript">
+		var app = angular.module('eagleEye', []);
+		app.controller('HomeController', function($scope, $http){
+			$scope.get_name = function(){
+				$http.get('https://siichile.herokuapp.com/consulta?rut=' + $scope.rut).
+				success(function(data, status, headers, config) {
+					console.log(data);
+					$scope.name = data.razon_social;
+					$scope.sii_data = data;
+				}).
+				error(function(data, status, headers, config) {
+					console.log(':c');
+				});
+			}
+			$scope.cedula_check = function(){
+				$scope.message = undefined;
+				get_data = {
+					rut: $scope.rut,
+					serial: $scope.serial
+				}
+				console.log(get_data);
+				url = 'http://<%= request.host %>/check_id';
+				params = '?rut=' + get_data.rut + '&serial=' +get_data.serial;
+				console.log(url+params);
+				$http.get(url + params).
+				success(function(data, status, headers, config) {
+					console.log(data);
+					$scope.check_data = data;
+					$scope.message = {
+						class: data.valid_chilean_id ? 'success' : 'danger',
+						text: data.valid_chilean_id ? 'Cedula Válida' : 'Cedula Inválida'
+					};
+				}).
+				error(function(data, status, headers, config) {
+					console.log(':c');
+				});
+			}
+		});
+    </script>
+  </head>
+  <body>
+    <div class="row" ng-controller="HomeController">
+	  <div class="col-md-2"></div>
+	  <div class="col-md-8">
+	  	<h1>Check Chilean ID</h1><hr>
+	    <form class="form-horizontal">
+		  <div class="form-group">
+		    <label for="" class="col-sm-2 control-label">Nombre</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" ng-model="name" disabled="disabled" placeholder="Ingresa un rut">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="" class="col-sm-2 control-label">Rut</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" ng-model="rut" ng-blur="get_name()" placeholder="Ingresa un rut">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="" class="col-sm-2 control-label">Serial</label>
+		    <div class="col-sm-10">
+		      <input type="text" class="form-control" ng-model="serial" placeholder="Numero de documento">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <div class="col-sm-offset-2 col-sm-10">
+		      <button class="btn btn-primary" ng-click="cedula_check()">Verificar Cedula</button>
+		    </div>
+		  </div>
+		  <div class="alert alert-{{ message.class }}" role="alert" ng-if="message">{{ message.text }}</div>
+		  <pre ng-if="sii_data">{{ sii_data | json }}</pre>
+		</form>
+	  </div>
+	</div>
+  </body>
+</html>
