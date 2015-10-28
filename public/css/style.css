@@ -32,12 +32,6 @@
 /*-------------------------------------------------------*/
 /* 1. Isotope filtering
 /*-------------------------------------------------------*/
-.signature{
-  font-family: Yellowtail 'Kaushan Script' Damion, cursive;
-  font-weight: 300;
-  text-decoration: underline;
-  text-transform:none;
-}
 .isotope-item {
   z-index: 2;
 }
